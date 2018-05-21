@@ -9,6 +9,7 @@ repositories {
 }
 
 dependencies {
+   compile 'org.javassist:javassist:3.22.0-GA'
    testCompile 'junit:junit:4.12'
 }
 
