@@ -1,6 +1,5 @@
 package org.jg.agent;
 
-import java.awt.datatransfer.StringSelection;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.security.ProtectionDomain;
