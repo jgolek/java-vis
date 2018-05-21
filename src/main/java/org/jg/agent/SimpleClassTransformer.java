@@ -1,5 +1,6 @@
 package org.jg.agent;
 
+import java.awt.datatransfer.StringSelection;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.security.ProtectionDomain;
@@ -15,6 +16,7 @@ public class SimpleClassTransformer implements ClassFileTransformer {
 	
 	
 		System.out.println(className);
+		
 		
 		return classfileBuffer;
 	}
