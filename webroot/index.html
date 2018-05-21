@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<link href="/js/easytree/skin-win8/ui.easytree.css" rel="stylesheet"
+	class="skins" type="text/css" />
+
+
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
+<script src="/js/easytree/jquery.easytree.js"></script>
+
+
+
+</head>
+<body>
+
+<div id="content">
+
+	<h5>Demo 2, created from JSON data</h5>
+	<div id="demo2_menu">
+
+	</div>
+</div>
+	
+</body>
+
+<script>
+	$(document).ready(function() {
+
+		var counter = 0;
+		function openLazyNode(event, nodes, node, hasChildren) {
+			if (hasChildren) {
+				return false;
+			}
+
+			//node.lazyUrlJson = "{ text: " + counter + " } "; // IE 6/7 compatible
+		}
+
+		$('#demo2_menu').easytree({
+			openLazyNode : openLazyNode,
+            dataUrl: '/data/'			
+		});
+		
+	});
+</script>
+</html>

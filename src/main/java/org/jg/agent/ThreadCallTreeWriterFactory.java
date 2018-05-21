@@ -8,7 +8,7 @@ public class ThreadCallTreeWriterFactory {
 
 	public ThreadCallTreeWriter create(String threadName) {
 		try {
-			File file = new File("./build/tmp/runtime/thread_"+threadName+".txt");
+			File file = new File("./runtime/thread_"+threadName+".txt");
 			file.getParentFile().mkdirs();
 			file.createNewFile();
 			
@@ -17,6 +17,11 @@ public class ThreadCallTreeWriterFactory {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		} 
+	}
+	
+	public ThreadCallTreeWriter create2(String threadName) {
+		System.out.println("Thread " +threadName);
+		return new ThreadCallTreeWriter(new PrintWriter(System.out));
 	}
 
 }

@@ -19,6 +19,7 @@ public class FileWriterTest {
 		
 		//given
 		
+		
 		RuntimeCallTree.enterMethod("org.Test.test1");
 		RuntimeCallTree.enterMethod("org.Test.test1.test1_1");
 		RuntimeCallTree.leaveMethod();
@@ -39,9 +40,7 @@ public class FileWriterTest {
 		File expectedOutputThreadFile = new File(outputFolder, "thread_main.txt");
 		
 		assertEquals(true, expectedOutputThreadFile.exists());
-		
-		System.out.println(FileUtils.readFileToString(expectedOutputThreadFile, "UTF-8"));
-		
+		//System.out.println(FileUtils.readFileToString(expectedOutputThreadFile, "UTF-8"));
 	}
 
 }

@@ -4,21 +4,21 @@ import java.io.IOException;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.security.ProtectionDomain;
-import java.util.List;
 
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.NotFoundException;
-import javassist.bytecode.AttributeInfo;
 
 public class ClassLogger implements ClassFileTransformer {
 	
 	private ClassPool classPool;
+	private String packagePrefix;
 
-	public ClassLogger() {
-        this.classPool = ClassPool.getDefault();
+	public ClassLogger(String packagePrefix) {
+        this.packagePrefix = packagePrefix;
+		this.classPool = ClassPool.getDefault();
 	}
 	
 	@Override
@@ -32,9 +32,7 @@ public class ClassLogger implements ClassFileTransformer {
 
 		String className = classNamePath.replace("/", ".");
 		
-		if(className.startsWith("org.jg.agent")) {
-			
-			//System.out.println(className);
+		if(className.startsWith(this.packagePrefix) || className.startsWith("java.lang.Thread")) {
 
 			try {
 				CtClass ctClass = classPool.get(className);
@@ -45,10 +43,8 @@ public class ClassLogger implements ClassFileTransformer {
 					String methodName = className + "." + ctMethod.getName();
 					System.out.println(methodName);
 					
-					
-					ctMethod.insertBefore("System.out.println(\"[Inst] Entering: "+methodName+"\");");
-					ctMethod.insertAfter("System.out.println(\"[Inst] Leaving: "+methodName+"\");");
-				
+					ctMethod.insertBefore("org.jg.agent.RuntimeCallTree.enterMethod(\""+methodName+"\");");
+					ctMethod.insertAfter("org.jg.agent.RuntimeCallTree.leaveMethod();");
 				}
 				
 				return ctClass.toBytecode();

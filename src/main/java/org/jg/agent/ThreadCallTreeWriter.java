@@ -15,14 +15,17 @@ public class ThreadCallTreeWriter {
 	}
 	
 	public void writeCalledMethod(CalledMethod calledMethod) {
-		
-		prefix = prefix + "  ";
 
 		List<String> split = Arrays.asList((calledMethod.name.split("\\.")));
-		String name = split.get(split.size() - 2) + "." + split.get(split.size() - 1) + "(...)";
+		String name = split.get(split.size() - 2) + "." + split.get(split.size() - 1) + "()";
 		String packageName = String.join(".", split.subList(0, split.size() - 2));
+		//this.writer.write(prefix + name + " : " + packageName+ "\n");
 		
-		this.writer.write(prefix + name + " : " + packageName+ "\n");
+		this.writer.write(prefix + "-\n");
+		this.writer.write(prefix + "  name: \""+name+"\"\n");
+		this.writer.write(prefix + "  children: \n");
+		
+		prefix = prefix + "  ";		
 	}
 
 	public void leaveCalledMethod() {
