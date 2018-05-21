@@ -11,8 +11,11 @@ public class ThreadCallTree {
 	
 	private CalledMethod lastCalledMethod = null;
 	
-	public ThreadCallTree(String nameArg) {
+	private ThreadCallTreeWriter threadCallTreeWriter;
+	
+	public ThreadCallTree(String nameArg, ThreadCallTreeWriter threadCallTreeWriterArg) {
 		this.threadName = nameArg;
+		this.threadCallTreeWriter = threadCallTreeWriterArg;
 	}
 
 	public void enterMethod(String calledMethodName) {
@@ -27,10 +30,13 @@ public class ThreadCallTree {
 			lastCalledMethod = calledMethod;
 		}
 		
+		threadCallTreeWriter.writeCalledMethod(calledMethod);
 	}
 
 	public void leaveMethod() {
 		
 		lastCalledMethod = lastCalledMethod.parentMethod;		
+		threadCallTreeWriter.leaveCalledMethod();
+
 	}
 }

@@ -124,8 +124,5 @@ public class RuntimeCallTreeTest {
 		assertEquals("org.Test.test2.test2_1_1", calledMethod2_1_1.name);	
 		assertEquals("org.Test.test2.test2_1_2", calledMethod2_1_2.name);	
 
-		System.out.println(RuntimeCallTree.getString());
 	}
-	
-	
 }

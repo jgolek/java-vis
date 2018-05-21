@@ -1,6 +1,5 @@
 package org.jg.agent;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -10,6 +9,8 @@ import java.util.Map;
 public class RuntimeCallTree {
 	
 	static Map<String, ThreadCallTree> runtimeThreads = new HashMap();
+	
+	public static ThreadCallTreeWriterFactory callTreeWriterFactory = new ThreadCallTreeWriterFactory();
 
 	public static void enterMethod(String calledMethodName) {
 		
@@ -19,9 +20,12 @@ public class RuntimeCallTree {
 		ThreadCallTree currentThreadCallTree = runtimeThreads.get(currentThreadName);
 		
 		if(currentThreadCallTree == null) {
-			ThreadCallTree threadCallTree = new ThreadCallTree(currentThreadName);
+			ThreadCallTreeWriter threadWriter = callTreeWriterFactory.create(currentThreadName);
+			
+			ThreadCallTree threadCallTree = new ThreadCallTree(currentThreadName, threadWriter);
 			runtimeThreads.put(threadCallTree.threadName, threadCallTree);
 			currentThreadCallTree = threadCallTree;
+			
 		}
 		
 		currentThreadCallTree.enterMethod(calledMethodName);
