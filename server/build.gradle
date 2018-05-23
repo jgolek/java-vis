@@ -1,0 +1,10 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+dependencies {
+   compile 'io.vertx:vertx-web:3.5.1'
+   compile 'commons-io:commons-io:2.6'
+
+   testCompile 'junit:junit:4.12'
+}
+

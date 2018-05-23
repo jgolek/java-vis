@@ -1,0 +1,6 @@
+rootProject.name = 'java-vis'
+
+include 'agent'
+include 'demo'
+include 'server'
+

@@ -1,48 +1,6 @@
-apply plugin: 'java'
-apply plugin: 'eclipse'
 
-version = '0.1'
-
-
-repositories {
-   jcenter()
-}
-
-dependencies {
-   compile 'org.javassist:javassist:3.22.0-GA'
-   testCompile 'junit:junit:4.12'
-   testCompile 'commons-io:commons-io:2.6'
-}
-
-jar {
-    archiveName = "${rootProject.name}-${rootProject.version}.jar"
-    manifest {
-        attributes(
-                'Premain-Class': 'org.jg.agent.MyAgent',
-                'Can-Redefine-Classes': 'true',
-                'Can-Retransform-Classes': 'true',
-                'Can-Set-Native-Method-Prefix': 'true',
-                'Implementation-Title': "ClassLogger",
-                'Implementation-Version': rootProject.version,
-                'Main-Class': 'org.jg.agent.demo.Test'
-        )
+allprojects {
+    repositories {
+        jcenter()
     }
 }
-
-task fatJar(type: Jar) {
-	manifest {
-        attributes( 
-                'Premain-Class': 'org.jg.agent.MyAgent',
-                'Can-Redefine-Classes': 'true',
-                'Can-Retransform-Classes': 'true',
-                'Can-Set-Native-Method-Prefix': 'true',
-                'Implementation-Title': "ClassLogger",
-                'Implementation-Version': rootProject.version,
-                'Main-Class': 'org.jg.agent.demo.Test'
-                )
-    }
-    baseName = project.name + '-all'
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar
-}
-

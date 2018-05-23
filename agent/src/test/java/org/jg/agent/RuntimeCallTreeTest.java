@@ -28,7 +28,7 @@ public class RuntimeCallTreeTest {
 		List<CalledMethod> calledMethods = threadCallTree.calledMethods;
 		CalledMethod       calledMethod  = calledMethods.get(0);
 		
-		assertEquals("main", threadCallTree.threadName);
+		assertEquals("Test worker", threadCallTree.threadName);
 		assertEquals("org.Test.test", calledMethod.name);
 	}
 	
