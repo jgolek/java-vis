@@ -1,11 +1,14 @@
-package org.jg.agent.view;
+package org.jg.server;
 
 import java.io.File;
+import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
+import org.yaml.snakeyaml.Yaml;
 
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpServer;
@@ -13,74 +16,64 @@ import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
+import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.StaticHandler;
 
 public class ViewMain {
 
 	public void run() throws Exception {
-		
-		String fileString = FileUtils.readFileToString(new File("test.json"), "UTF-8");
-		JsonArray ja = new JsonArray(fileString);
 
-		final List<Item> items = toItems(ja, "/data/");
-		
+		//String fileString = "";//FileUtils.readFileToString(new File("test.json"), "UTF-8");
+		//JsonArray ja = new JsonArray(fileString);
+
+		Yaml yaml = new Yaml();
+		Collection<File> threadsInFolder = FileUtils.listFiles(new File("./runtime/"), new String[] {"txt"}, false);
+		final List<Item> threadItems = new ArrayList<>();
+		int index = 0;
+		for (File file : threadsInFolder) {
+			System.out.println(file.getName());
+			List<String> list = (List<String>) yaml.load(new FileReader(file));
+			String path = "/data/thread/"+index;
+			final List<Item> items = toItems(list, path + "_");
+			Item threadItem = new Item();
+			threadItem.items = items;
+			threadItem.name = file.getName();
+			threadItem.path = path;
+			index++;
+			threadItems.add(threadItem);
+		}
+
 		Vertx vertx = Vertx.vertx();
 		HttpServer server = vertx.createHttpServer();
 
 		Router router = Router.router(vertx);
 
 		router.route("/data").handler(routingContext -> {
-			HttpServerResponse response = routingContext.response();
-			response.putHeader("content-type", "application/json");
-			
-			JsonArray jsonArray = new JsonArray();
-			for (Item item : items) {
-				JsonObject jsonObject = new JsonObject();
-				jsonObject.put("text", item.name);
-				jsonObject.put("isLazy", !item.items.isEmpty());
-				jsonObject.put("isFolder", !item.items.isEmpty());		
-				jsonObject.put("lazyUrl", item.path);		
-				
-				jsonArray.add(jsonObject);
-			}
-			
-			response.putHeader("content-type", "application/json");
-			response.end(jsonArray.toString());
-			
+
+			JsonArray jsonArray = toJsonArray(threadItems);
+
+			sendJsonResponseToClient(routingContext, jsonArray);
+
+
 		});
-		
-		router.route("/data/:path").handler(routingContext -> {
-			HttpServerResponse response = routingContext.response();
-			response.putHeader("content-type", "application/json");
-			
+
+		router.route("/data/thread/:path").handler(routingContext -> {
+
 			String param = routingContext.request().getParam("path");
-			System.out.println(param);
-			
+
 			String[] pathIds = param.split("_");
-			List<Item> searchItems = items;
+			List<Item> searchItems = threadItems;
 			for (int i = 0; i < pathIds.length; i++) {
 				String s = pathIds[i];
 				Item item = searchItems.get(Integer.parseInt(s));
 				searchItems = item.items;
 			}
-			
-			JsonArray jsonArray = new JsonArray();
-			for (Item item : searchItems) {
-				JsonObject jsonObject = new JsonObject();
-				jsonObject.put("text", item.name);
-				jsonObject.put("isLazy", !item.items.isEmpty());
-				jsonObject.put("isFolder", !item.items.isEmpty());		
-				jsonObject.put("lazyUrl", item.path);		
 
-				jsonArray.add(jsonObject);
-			}
-			
-			 
-			response.putHeader("content-type", "application/json");
-			response.end(jsonArray.toString());
-			
+			JsonArray jsonArray = toJsonArray(searchItems);
+
+			sendJsonResponseToClient(routingContext, jsonArray);
+
 		});
-		
 
 		router.route("/*").handler(StaticHandler.create());
 
@@ -89,17 +82,37 @@ public class ViewMain {
 		System.out.println("Server is running!");
 	}
 
-	private List<Item> toItems(JsonArray ja, String path) {
+	private void sendJsonResponseToClient(RoutingContext routingContext, JsonArray jsonArray) {
+		HttpServerResponse response = routingContext.response();
+		response.putHeader("content-type", "application/json");		
+		response.end(jsonArray.toString());
+	}
+
+	private JsonArray toJsonArray(List<Item> searchItems) {
+		JsonArray jsonArray = new JsonArray();
+		for (Item item : searchItems) {
+			JsonObject jsonObject = new JsonObject();
+			jsonObject.put("text", item.name);
+			jsonObject.put("isLazy", !item.items.isEmpty());
+			jsonObject.put("isFolder", !item.items.isEmpty());
+			jsonObject.put("lazyUrl", item.path);
+
+			jsonArray.add(jsonObject);
+		}
+		return jsonArray;
+	}
+
+	private List<Item> toItems(List ja, String path) {
 		List<Item> items = new ArrayList<Item>();
 		for (int i = 0; i < ja.size(); i++) {
 			Item item = new Item();
-			JsonObject obj = new JsonObject((Map<String, Object>)ja.getList().get(i));
-			item.name = obj.getString("name");
+			Map itemValue = (Map) ja.get(i);
+			item.name = (String) itemValue.get("name");
 			item.path = path + i;
-			
-			JsonArray jsonArray = obj.getJsonArray("children", new JsonArray(new ArrayList<>()));
-			if(jsonArray != null && jsonArray.getList() != null && !jsonArray.getList().isEmpty()) {
-				item.items = toItems(jsonArray, item.path + "_");
+
+			List subList = (List) itemValue.get("children");
+			if (subList != null && subList != null && !subList.isEmpty()) {
+				item.items = toItems(subList, item.path + "_");
 			}
 			items.add(item);
 		}
@@ -107,8 +120,6 @@ public class ViewMain {
 	}
 
 	public static void main(String[] args) throws Exception {
-
 		new ViewMain().run();
-
 	}
 }

@@ -1,4 +1,4 @@
-package org.jg.agent.view;
+package org.jg.server;
 
 import java.util.ArrayList;
 import java.util.List;
