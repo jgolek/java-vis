@@ -1,4 +1,4 @@
-package org.jg.agent.demo.service;
+package org.jg.demo.service;
 
 public class DemoService {
 

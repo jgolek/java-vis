@@ -1,6 +1,6 @@
-package org.jg.agent.demo;
+package org.jg.demo;
 
-import org.jg.agent.demo.service.DemoService;
+import org.jg.demo.service.DemoService;
 
 public class DemoRunnable implements Runnable{
 

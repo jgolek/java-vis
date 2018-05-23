@@ -1,4 +1,4 @@
-package org.jg.agent.demo;
+package org.jg.demo;
 
 public class DemoMain {
 

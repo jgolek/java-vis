@@ -1,11 +1,21 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
 
+
+jar {
+	manifest {
+        attributes(
+                'Implementation-Version': rootProject.version,
+                'Main-Class': 'org.jg.demo.DemoMain'
+                )
+    }
+}
+
 task fatJar(type: Jar) {
 	manifest {
         attributes(
                 'Implementation-Version': rootProject.version,
-                'Main-Class': 'org.jg.agent.demo.DemoMain'
+                'Main-Class': 'org.jg.demo.DemoMain'
                 )
     }
     baseName = project.name + '-all'
