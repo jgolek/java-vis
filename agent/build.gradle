@@ -7,21 +7,6 @@ dependencies {
    testCompile 'commons-io:commons-io:2.6'
 }
 
-jar {
-    archiveName = "${rootProject.name}-${rootProject.version}.jar"
-    manifest {
-        attributes(
-                'Premain-Class': 'org.jg.agent.MyAgent',
-                'Can-Redefine-Classes': 'true',
-                'Can-Retransform-Classes': 'true',
-                'Can-Set-Native-Method-Prefix': 'true',
-                'Implementation-Title': "ClassLogger",
-                'Implementation-Version': rootProject.version,
-                'Main-Class': 'org.jg.agent.demo.Test'
-        )
-    }
-}
-
 task fatJar(type: Jar) {
 	manifest {
         attributes(
@@ -34,7 +19,7 @@ task fatJar(type: Jar) {
                 'Main-Class': 'org.jg.agent.demo.Test'
                 )
     }
-    baseName = project.name + '-all'
+    baseName = 'java-vis-' + project.name + '-all'
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
 }

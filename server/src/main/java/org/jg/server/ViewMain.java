@@ -31,7 +31,6 @@ public class ViewMain {
 		final List<Item> threadItems = new ArrayList<>();
 		int index = 0;
 		for (File file : threadsInFolder) {
-			System.out.println(file.getName());
 			List<String> list = (List<String>) yaml.load(new FileReader(file));
 			String path = "/data/thread/"+index;
 			final List<Item> items = toItems(list, path + "_");
