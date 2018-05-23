@@ -27,7 +27,7 @@ public class ViewMain {
 		//JsonArray ja = new JsonArray(fileString);
 
 		Yaml yaml = new Yaml();
-		Collection<File> threadsInFolder = FileUtils.listFiles(new File("./runtime/"), new String[] {"txt"}, false);
+		Collection<File> threadsInFolder = FileUtils.listFiles(new File("./runtime/"), new String[] {"yaml"}, false);
 		final List<Item> threadItems = new ArrayList<>();
 		int index = 0;
 		for (File file : threadsInFolder) {

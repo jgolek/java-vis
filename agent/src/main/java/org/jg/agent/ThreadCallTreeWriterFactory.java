@@ -8,7 +8,7 @@ public class ThreadCallTreeWriterFactory {
 
 	public ThreadCallTreeWriter create(String threadName) {
 		try {
-			File file = new File("./runtime/thread_"+threadName+".txt");
+			File file = new File("./runtime/thread_"+threadName+".yaml");
 			file.getParentFile().mkdirs();
 			file.createNewFile();
 			

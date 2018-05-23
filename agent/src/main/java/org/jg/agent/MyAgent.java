@@ -11,8 +11,6 @@ public class MyAgent {
 		System.out.println("Test Java Agent");
 		ClassLogger transformer = new ClassLogger(packagePrefix);
 		instrumentation.addTransformer(transformer);
-
 	}
-
 }
  	
