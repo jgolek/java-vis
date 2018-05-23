@@ -33,7 +33,19 @@ public class ThreadCallTree {
 		threadCallTreeWriter.writeCalledMethod(calledMethod);
 	}
 
-	public void leaveMethod() {
+	public void leaveMethod(String calledMethodName) {
+		
+		boolean calledMethodIsNotLastCalledMethod = !calledMethodName.equals(lastCalledMethod.name);
+		//if(calledMethodIsNotLastCalledMethod) {
+		//	throw new RuntimeException("Called method isn't last called method:" + calledMethodName 
+		//			+ "  lastMethod: " + lastCalledMethod.name + "  Thread: " + Thread.currentThread().getName());
+		//};
+		while(calledMethodIsNotLastCalledMethod) {
+			lastCalledMethod = lastCalledMethod.parentMethod;		
+			threadCallTreeWriter.leaveCalledMethod();
+			calledMethodIsNotLastCalledMethod = !calledMethodName.equals(lastCalledMethod.name);
+		};
+		
 		
 		lastCalledMethod = lastCalledMethod.parentMethod;		
 		threadCallTreeWriter.leaveCalledMethod();

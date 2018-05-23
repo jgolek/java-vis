@@ -20,18 +20,18 @@ public class FileWriterTest {
 		//given
 		RuntimeCallTree.enterMethod("org.Test.test1");
 		RuntimeCallTree.enterMethod("org.Test.test1.test1_1");
-		RuntimeCallTree.leaveMethod();
-		RuntimeCallTree.leaveMethod();
+		RuntimeCallTree.leaveMethod("org.Test.test1.test1_1");
+		RuntimeCallTree.leaveMethod("org.Test.test1");
 
 		RuntimeCallTree.enterMethod("org.Test.test2");
 		RuntimeCallTree.enterMethod("org.Test.test2.test2_1");
 		RuntimeCallTree.enterMethod("org.Test.test2.test2_1_1");
-		RuntimeCallTree.leaveMethod();
+		RuntimeCallTree.leaveMethod("org.Test.test2.test2_1_1");
 		RuntimeCallTree.enterMethod("org.Test.test2.test2_1_2");		
-		RuntimeCallTree.leaveMethod();
-		RuntimeCallTree.leaveMethod();
+		RuntimeCallTree.leaveMethod("org.Test.test2.test2_1_2");
+		RuntimeCallTree.leaveMethod("org.Test.test2.test2_1");
 		RuntimeCallTree.enterMethod("org.Test.test2.test2_2");
-		RuntimeCallTree.leaveMethod();
+		RuntimeCallTree.leaveMethod("org.Test.test2.test2_2");
 		
 		File outputFolder = new File("./build/tmp/runtime");
 		//then

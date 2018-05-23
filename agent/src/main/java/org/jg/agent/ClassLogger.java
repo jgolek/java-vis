@@ -9,6 +9,7 @@ import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
+import javassist.Modifier;
 import javassist.NotFoundException;
 
 public class ClassLogger implements ClassFileTransformer {
@@ -31,6 +32,14 @@ public class ClassLogger implements ClassFileTransformer {
 	{
 
 		String className = classNamePath.replace("/", ".");
+		//System.out.println(className);
+		CtClass etype = null;
+		try {
+			etype = ClassPool.getDefault().get("java.lang.Exception");
+		} catch (NotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 		if(className.startsWith(this.packagePrefix) || className.startsWith("java.lang.Thread")) {
 
@@ -41,10 +50,17 @@ public class ClassLogger implements ClassFileTransformer {
 				
 				for (CtMethod ctMethod : methods) {
 					String methodName = className + "." + ctMethod.getName();
-					System.out.println(methodName);
+					//System.out.println(methodName + " Modifier: " +ctMethod.getModifiers());
 					
-					ctMethod.insertBefore("org.jg.agent.RuntimeCallTree.enterMethod(\""+methodName+"\");");
-					ctMethod.insertAfter("org.jg.agent.RuntimeCallTree.leaveMethod();");
+					boolean isNotANativeMethod = !Modifier.isNative(ctMethod.getModifiers());
+					boolean isAAbstractMethod  = !Modifier.isAbstract(ctMethod.getModifiers());
+					
+					if(isNotANativeMethod && isAAbstractMethod) { 
+						ctMethod.insertBefore("org.jg.agent.RuntimeCallTree.enterMethod(\""+methodName+"\");");
+						ctMethod.insertAfter("org.jg.agent.RuntimeCallTree.leaveMethod(\""+methodName+"\");");
+						
+						ctMethod.addCatch("{ System.out.println($e); throw $e; }", etype);
+					}
 				}
 				
 				return ctClass.toBytecode();

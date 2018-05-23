@@ -35,13 +35,13 @@ public class RuntimeCallTree {
 		return runtimeThreads.values();
 	}
 
-	public static void leaveMethod() {
+	public static void leaveMethod(String calledMethodName) {
 		
 		Thread currentThread = Thread.currentThread();
 		String currentThreadName = currentThread.getName();
 		
 		ThreadCallTree currentThreadCallTree = runtimeThreads.get(currentThreadName);
-		currentThreadCallTree.leaveMethod();
+		currentThreadCallTree.leaveMethod(calledMethodName);
 	}
 	
 	public static String getString() {
