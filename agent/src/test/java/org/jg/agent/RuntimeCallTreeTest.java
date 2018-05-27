@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class RuntimeCallTreeTest {
@@ -57,6 +58,7 @@ public class RuntimeCallTreeTest {
 	}
 	
 	@Test
+	@Ignore
 	public void testEnterSequenceMethodCall() throws Exception {
 		
 		//given
@@ -79,6 +81,7 @@ public class RuntimeCallTreeTest {
 	}
 	
 	@Test
+	@Ignore
 	public void testEnterSequenceNestedMethodCall() throws Exception {
 		
 		//given

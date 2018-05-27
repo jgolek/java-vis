@@ -1,18 +1,22 @@
 package org.jg.agent;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
 public class ThreadCallTreeWriterFactory {
 
-	public ThreadCallTreeWriter create(String threadName) {
+	public ThreadCallTreeWriter create(String timestamp, String threadName) {
 		try {
-			File file = new File("./runtime/thread_"+threadName+".yaml");
+			File file = new File("./runtime/"+timestamp+"_thread_"+threadName+".yaml");
 			file.getParentFile().mkdirs();
 			file.createNewFile();
 			
-			return new ThreadCallTreeWriter(new PrintWriter(file));
+			BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, true)));
+			return new ThreadCallTreeWriter(new PrintWriter(bufferedWriter));
 			
 		} catch (IOException e) {
 			throw new RuntimeException(e);

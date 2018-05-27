@@ -33,7 +33,7 @@ public class ThreadCallTree {
 		threadCallTreeWriter.writeCalledMethod(calledMethod);
 	}
 
-	public void leaveMethod(String calledMethodName) {
+	public CalledMethod leaveMethod(String calledMethodName) {
 		
 		boolean calledMethodIsNotLastCalledMethod = !calledMethodName.equals(lastCalledMethod.name);
 		//if(calledMethodIsNotLastCalledMethod) {
@@ -50,5 +50,6 @@ public class ThreadCallTree {
 		lastCalledMethod = lastCalledMethod.parentMethod;		
 		threadCallTreeWriter.leaveCalledMethod();
 
+		return lastCalledMethod;
 	}
 }

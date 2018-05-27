@@ -32,4 +32,8 @@ public class ThreadCallTreeWriter {
 		prefix = prefix.substring(0, prefix.length() - 2);
 		this.writer.flush();
 	}
+
+	public void close() {
+		this.writer.close();
+	}
 }

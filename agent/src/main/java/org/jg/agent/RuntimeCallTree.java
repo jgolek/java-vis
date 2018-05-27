@@ -1,7 +1,10 @@
 package org.jg.agent;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +15,8 @@ public class RuntimeCallTree {
 	
 	public static ThreadCallTreeWriterFactory callTreeWriterFactory = new ThreadCallTreeWriterFactory();
 
+	private static ThreadCallTreeWriter threadWriter;
+
 	public static void enterMethod(String calledMethodName) {
 		
 		Thread currentThread = Thread.currentThread();
@@ -20,7 +25,10 @@ public class RuntimeCallTree {
 		ThreadCallTree currentThreadCallTree = runtimeThreads.get(currentThreadName);
 		
 		if(currentThreadCallTree == null) {
-			ThreadCallTreeWriter threadWriter = callTreeWriterFactory.create(currentThreadName);
+			
+			DateFormat df = new SimpleDateFormat("HHmmss_SS");
+			String timestamp = df.format(new Date());
+			threadWriter = callTreeWriterFactory.create(timestamp, currentThreadName);
 			
 			ThreadCallTree threadCallTree = new ThreadCallTree(currentThreadName, threadWriter);
 			runtimeThreads.put(threadCallTree.threadName, threadCallTree);
@@ -41,7 +49,11 @@ public class RuntimeCallTree {
 		String currentThreadName = currentThread.getName();
 		
 		ThreadCallTree currentThreadCallTree = runtimeThreads.get(currentThreadName);
-		currentThreadCallTree.leaveMethod(calledMethodName);
+		CalledMethod lastCalledMethod = currentThreadCallTree.leaveMethod(calledMethodName);
+		if(lastCalledMethod == null) {
+			runtimeThreads.remove(currentThreadName);
+			threadWriter.close();
+		}
 	}
 	
 	public static String getString() {
