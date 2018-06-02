@@ -36,3 +36,7 @@ build/
 gradle/
 gradlew
 gradlew.bat
+
+demo/runtime/
+agent/runtime/
+server/runtime/

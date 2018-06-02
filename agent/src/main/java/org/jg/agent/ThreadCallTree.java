@@ -12,7 +12,7 @@ public class ThreadCallTree {
 	private CalledMethod lastCalledMethod = null;
 	
 	private ThreadCallTreeWriter threadCallTreeWriter;
-	
+
 	public ThreadCallTree(String nameArg, ThreadCallTreeWriter threadCallTreeWriterArg) {
 		this.threadName = nameArg;
 		this.threadCallTreeWriter = threadCallTreeWriterArg;

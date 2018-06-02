@@ -10,6 +10,8 @@ public class ThreadCallTreeWriter {
 	
 	String prefix = "";
 	
+	long writtenMethods = 0;
+	
 	public ThreadCallTreeWriter(PrintWriter writerArg) {
 		this.writer = writerArg;
 	}
@@ -23,9 +25,11 @@ public class ThreadCallTreeWriter {
 		
 		this.writer.write(prefix + "-\n");
 		this.writer.write(prefix + "  name: \""+name+"\"\n");
+		this.writer.write(prefix + "  startTime: "+System.currentTimeMillis()+"\n");
 		this.writer.write(prefix + "  children: \n");
 		
-		prefix = prefix + "  ";		
+		prefix = prefix + "  ";
+		writtenMethods = writtenMethods + 1;
 	}
 
 	public void leaveCalledMethod() {
@@ -34,6 +38,8 @@ public class ThreadCallTreeWriter {
 	}
 
 	public void close() {
+		this.writer.write(prefix + "  endTime: "+System.currentTimeMillis()+"\n");
+		this.writer.write(prefix + "  calledMethods: "+writtenMethods+"\n");
 		this.writer.close();
 	}
 }

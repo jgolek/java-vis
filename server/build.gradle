@@ -1,5 +1,9 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
+apply plugin: 'application'
+
+mainClassName = "org.jg.server.ServerMain"
+
 
 dependencies {
    compile 'io.vertx:vertx-web:3.5.1'
