@@ -34,9 +34,9 @@ public class ServerMain {
 		List<File> sortedList = new ArrayList<>(threadsInFolder);
 		Collections.sort(sortedList);
 		
-		
 		int index = 0;
 		for (File file : sortedList) {
+			System.out.println("Loadling: " + file.getName());
 			List<String> list = (List<String>) yaml.load(new FileReader(file));
 			String path = "/data/thread/"+index;
 			//test
@@ -47,7 +47,7 @@ public class ServerMain {
 			threadItem.time = nameParts[0];
 			threadItem.thread = nameParts[1].replace(".yaml", "");
 			
-			if(false && items.size() == 0) {
+			if(true && items.size() == 0) {
 				Item item = items.get(0);
 				threadItem.name = item.name;
 				threadItem.path = item.path;

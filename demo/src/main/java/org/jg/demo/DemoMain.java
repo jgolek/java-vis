@@ -14,6 +14,6 @@ public class DemoMain {
 
 		Thread thread2 = new Thread(new DemoRunnable(), "thread2");
 		thread2.run();
-	
+		
 	}
 }

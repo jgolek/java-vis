@@ -1,5 +1,7 @@
 package org.jg.demo;
 
+import java.util.ArrayList;
+
 import org.jg.demo.service.DemoService;
 
 public class DemoRunnable implements Runnable{
@@ -8,7 +10,7 @@ public class DemoRunnable implements Runnable{
 	public void run() {
 		DemoService demoService = new DemoService();
 		try {
-			demoService.doSomething();
+			demoService.doSomething("fooBar", new Object(), 4711, new ArrayList<>(), new Integer[] {1,2,3} );
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

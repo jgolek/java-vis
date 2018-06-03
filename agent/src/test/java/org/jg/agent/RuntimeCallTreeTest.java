@@ -20,7 +20,7 @@ public class RuntimeCallTreeTest {
 	public void testEnterOneMethodCall() throws Exception {
 		
 		//given
-		RuntimeCallTree.enterMethod("org.Test.test");
+		enterMethod("org.Test.test");
 		
 		//then
 		Collection<ThreadCallTree> threads = RuntimeCallTree.getThreads();
@@ -32,14 +32,22 @@ public class RuntimeCallTreeTest {
 		//assertEquals("Test worker", threadCallTree.threadName);
 		assertEquals("org.Test.test", calledMethod.name);
 	}
+
+	private void enterMethod(String name) {
+		RuntimeCallTree.enterMethod(name, new Object[] {});
+	}
+
+	private void leaveMethod(String name) {
+		RuntimeCallTree.leaveMethod(name, new Object[] {});
+	}
+	
 	
 	@Test
 	public void testEnterANestedMethodCall() throws Exception {
 		
-		//given
-		RuntimeCallTree.enterMethod("org.Test.test");
-		RuntimeCallTree.enterMethod("org.Test.testInTest");
-		RuntimeCallTree.enterMethod("org.Test.testInTestInTest");
+		enterMethod("org.Test.test");
+		enterMethod("org.Test.testInTest");
+		enterMethod("org.Test.testInTestInTest");
 		
 		//then
 		Collection<ThreadCallTree> threads = RuntimeCallTree.getThreads();
@@ -62,11 +70,11 @@ public class RuntimeCallTreeTest {
 	public void testEnterSequenceMethodCall() throws Exception {
 		
 		//given
-		RuntimeCallTree.enterMethod("org.Test.test1");
-		RuntimeCallTree.leaveMethod("org.Test.test1");
+		enterMethod("org.Test.test1");
+		leaveMethod("org.Test.test1");
 
-		RuntimeCallTree.enterMethod("org.Test.test2");
-		RuntimeCallTree.leaveMethod("org.Test.test2");
+		enterMethod("org.Test.test2");
+		leaveMethod("org.Test.test2");
 		
 		//then
 		Collection<ThreadCallTree> threads = RuntimeCallTree.getThreads();
@@ -85,20 +93,20 @@ public class RuntimeCallTreeTest {
 	public void testEnterSequenceNestedMethodCall() throws Exception {
 		
 		//given
-		RuntimeCallTree.enterMethod("org.Test.test1");
-		RuntimeCallTree.enterMethod("org.Test.test1.test1_1");
-		RuntimeCallTree.leaveMethod("org.Test.test1.test1_1");
-		RuntimeCallTree.leaveMethod("org.Test.test1");
+		enterMethod("org.Test.test1");
+		enterMethod("org.Test.test1.test1_1");
+		leaveMethod("org.Test.test1.test1_1");
+		leaveMethod("org.Test.test1");
 
-		RuntimeCallTree.enterMethod("org.Test.test2");
-		RuntimeCallTree.enterMethod("org.Test.test2.test2_1");
-		RuntimeCallTree.enterMethod("org.Test.test2.test2_1_1");
-		RuntimeCallTree.leaveMethod("org.Test.test2.test2_1_1");
-		RuntimeCallTree.enterMethod("org.Test.test2.test2_1_2");		
-		RuntimeCallTree.leaveMethod("org.Test.test2.test2_1_2");
-		RuntimeCallTree.leaveMethod("org.Test.test2.test2_1");
-		RuntimeCallTree.enterMethod("org.Test.test2.test2_2");
-		RuntimeCallTree.leaveMethod("org.Test.test2.test2_2");
+		enterMethod("org.Test.test2");
+		enterMethod("org.Test.test2.test2_1");
+		enterMethod("org.Test.test2.test2_1_1");
+		leaveMethod("org.Test.test2.test2_1_1");
+		enterMethod("org.Test.test2.test2_1_2");		
+		leaveMethod("org.Test.test2.test2_1_2");
+		leaveMethod("org.Test.test2.test2_1");
+		enterMethod("org.Test.test2.test2_2");
+		leaveMethod("org.Test.test2.test2_2");
 
 		
 		

@@ -17,7 +17,7 @@ public class RuntimeCallTree {
 
 	private static ThreadCallTreeWriter threadWriter;
 
-	public static void enterMethod(String calledMethodName) {
+	public static void enterMethod(String calledMethodName, Object[] arguments) {
 		
 		Thread currentThread = Thread.currentThread();
 		String currentThreadName = currentThread.getName();
@@ -36,20 +36,20 @@ public class RuntimeCallTree {
 			
 		}
 		
-		currentThreadCallTree.enterMethod(calledMethodName);
+		currentThreadCallTree.enterMethod(calledMethodName, arguments);
 	}
 
 	public static Collection<ThreadCallTree> getThreads() {
 		return runtimeThreads.values();
 	}
 
-	public static void leaveMethod(String calledMethodName) {
+	public static void leaveMethod(String calledMethodName, Object returnValue) {
 		
 		Thread currentThread = Thread.currentThread();
 		String currentThreadName = currentThread.getName();
 		
 		ThreadCallTree currentThreadCallTree = runtimeThreads.get(currentThreadName);
-		CalledMethod lastCalledMethod = currentThreadCallTree.leaveMethod(calledMethodName);
+		CalledMethod lastCalledMethod = currentThreadCallTree.leaveMethod(calledMethodName, returnValue);
 		if(lastCalledMethod == null) {
 			runtimeThreads.remove(currentThreadName);
 			threadWriter.close();

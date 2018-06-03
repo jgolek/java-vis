@@ -3,6 +3,8 @@ apply plugin: 'eclipse'
 
 dependencies {
    compile 'org.javassist:javassist:3.22.0-GA'
+   compile 'org.yaml:snakeyaml:1.21'
+   
    testCompile 'junit:junit:4.12'
    testCompile 'commons-io:commons-io:2.6'
 }
